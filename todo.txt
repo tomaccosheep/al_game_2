@@ -1,0 +1,7 @@
+.make a room creator
+...make a list of rooms that are 25x25
+...auto-place doors at edges of rooms in the middle of walls
+...auto-trade chunks with adjacent rooms
+
+.make barrels flamable
+.make enemies shoot fire-spells
