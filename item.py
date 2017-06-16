@@ -19,10 +19,10 @@ class Spell(Item):
 
 class Furniture(Item):
     def __init__(self, name):
-        box_in = None
+        self.box_in = None
         self.name = name
-        if name == 'box':
-            box_in = Spell('fire spell')
-        self.param = {'box': [10, box_in], 'barrel': [10, None]}
+        if self.name == 'box':
+            self.box_in = Spell('fire spell')
+        self.param = {'box': [10, self.box_in], 'barrel': [10, None]}
         self.has = self.param[name][1]
 

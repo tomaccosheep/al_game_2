@@ -1,3 +1,5 @@
+import item
+from random import randint
 class Coord():
     def __init__(self, in_coord, item=None):
         # Every set of coordinates has 3 points on the z-axis to place
@@ -23,7 +25,8 @@ class Coord():
             if self.z0 == None:
                 if self.z1 != None:
                     self.z0 = self.z1
-                    self.z1 = None
+                    self.z1 = self.z2
+                    self.z2 = None
             if self.z1 == None:
                 if self.z2 != None:
                     self.z1 = self.z1
@@ -58,11 +61,11 @@ class Coord():
                 if i != None:
                     not_empty.append(i)
             if len(not_empty) == 3:
-                return "The {} is on the {}, which is on the {}".format(not_empty[2], not_empty[1], not_empty[0])
+                return "The {} is on the {}, which is on the {}.".format(not_empty[2], not_empty[1], not_empty[0])
             elif len(not_empty) == 2:
-                return "The {} is on the {}".format(not_empty[1], not_empty[0])
+                return "The {} is on the {}.".format(not_empty[1], not_empty[0])
             else:
-                return "The {} is on the ground".format(not_empty[0])
+                return "The {} is on the ground.".format(not_empty[0])
         # }}
             
     def take(self, myitem):
@@ -86,12 +89,17 @@ class Coord():
             return returnie
         # }}
 
+    def take_z0(self):
+        returnie = self.z0
+        self.z0 = self.z1
+        self.z1 = self.z2
+        return returnie 
 
     def update():
         pass
 
 # This creates a room with basic conditions, and it also gives the room map_coord and room_coord
-# Room_coord is zoomed in relative to map_coord at a scale of 5 to 1
+# Every room has one map coordinate
 # {{
 class Room():
 
@@ -100,9 +108,18 @@ class Room():
         self.coord_midpoint = coord_midpoint
         self.coord_dict = {}
 
-        for i in range(0, 24):
-            for j in range(0, 24):
+        for i in range(0, 25):
+            for j in range(0, 25):
                 self.coord_dict[(i, j)] = Coord((i, j))
+
+        random_count = 0
+        while random_count < 21:
+            if random_count <= 10:
+                in_item = item.Furniture('barrel')
+            else:
+                in_item = item.Furniture('box')
+            self.coord_dict[(randint(0, 24), randint(0, 24))].place(in_item)
+            random_count = randint(0, 21)
 
     def __str__(self):
         return str(self.coord_midpoint)
