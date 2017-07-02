@@ -3,7 +3,7 @@ from random import randint
 class Coord():
     def __init__(self, in_coord, item=None):
         # Every set of coordinates has 3 points on the z-axis to place
-        # items
+        # items. It also has a status.
         # {{
         self.coord = in_coord
         self.z0 = item
@@ -29,7 +29,7 @@ class Coord():
                     self.z2 = None
             if self.z1 == None:
                 if self.z2 != None:
-                    self.z1 = self.z1
+                    self.z1 = self.z2
                     self.z2 = None
         # }}
 
@@ -98,14 +98,14 @@ class Coord():
     def update():
         pass
 
-# This creates a room with basic conditions, and it also gives the room map_coord and room_coord
-# Every room has one map coordinate
+# This creates a room with 25 by 25 coordinate objects, and then it randomly places
+# barrels and boxes in the room. It also assigns the room one map coordinate
 # {{
 class Room():
 
-    def __init__(self, characters, coord_midpoint):
+    def __init__(self, characters, map_coord):
         self.characters = characters
-        self.coord_midpoint = coord_midpoint
+        self.map_coord = map_coord
         self.coord_dict = {}
 
         for i in range(0, 25):
@@ -122,10 +122,10 @@ class Room():
             random_count = randint(0, 21)
 
     def __str__(self):
-        return str(self.coord_midpoint)
+        return str(self.map_coord)
 
     def __repr__(self):
-        return str(self.coord_midpoint)
+        return str(self.map_coord)
 
     def update_characters(self, characters):
         self.characters = list(characters)

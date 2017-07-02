@@ -70,43 +70,6 @@ def update(player, in_room, characters):
     update_characters(characters)
     update_room(in_room)
 
-
-## This will build a room. First it creates an empty list,
-## coordinate_builder, and it receives the central coordinates for
-## it's map. It builds off the map coordinates, making a room with
-## two points above and two points below
-## {{
-#def build_room(in_coord):
-#    coordinate_builder = []
-#    iterate_y = in_coord[0]
-#    iterate_x = in_coord[1]
-#    for i in range(iterate_y - 12, iterate_y + 13):
-#        for j in range(iterate_x - 12, iterate_x + 13):
-#            coordinate_builder.append((i, j))
-#    room1 = room.Room([], coordinate_builder)
-#    return room1
-## }}
-#
-#
-## This will build a bunch of rooms and swap coordinates
-## with the rooms around them
-## {{
-#def build_room_list():
-#    # This makes a dictionary of rooms with a tuple as
-#    # the key for each room. 
-#    room_dict = {}
-#    for i in range(12, 112, 25):
-#        for j in range(12, 112, 25):
-#            room_dict[(i, j)] = build_room((i, j)) 
-#    #for (i, j) in room_dict:
-#    #    try:
-#            
-#        
-#    return room_list_of_list
-## }}
-                
-
-
 players = []
 rooms = []
 
@@ -117,7 +80,8 @@ game_over = False
 turn_finished = False
 # }}
 
-# Establish a screen {{
+# Establish a screen
+# {{
 myscreen = curses.initscr()
 # }}
 
@@ -125,28 +89,50 @@ myscreen = curses.initscr()
 # Establish a test room, and place items into that test room
 # {{
 test_player = character.Player()
+
+# Make a dictionary of rooms
+# {{
 main_room_dict = {}
 for i in range(0, 5):
     for j in range(0, 5):
         main_room_dict[(i, j)] = room.Room([], (i, j))  
+# }}
+
+
 main_room_dict[(0, 0)].characters.append(test_player)
 print_room(main_room_dict[(0, 0)], test_player)
+
+# Place test items at (24, 10)
+# {{
 for i in range(0, 3):
     furniture_list = ['box', 'box', 'barrel']
-    main_room_dict[(0, 0)].coord_dict[(0, 0)].place(item.Furniture(furniture_list[i]))
+    main_room_dict[(0, 0)].coord_dict[(24, 10)].place(item.Furniture(furniture_list[i]))
 # }}
+# }}
+
+
+# Run the while loop, and react to different inputs
+# {{
+
 myscreen.keypad(True)
 while game_over == False:
     myscreen.clear()
+
+    # Print the screen, what items exist on the floor at the player's position, and
+    # the player's inventory
+    # {{
     print_room(main_room_dict[(0, 0)], test_player)
     myscreen.addstr(26, 0, main_room_dict[(0, 0)].coord_dict[test_player.location].announce())
     myscreen.addstr(27, 0, str(test_player.inventory))
     inkey = myscreen.getkey()
+    # }}
+
+    # Movement
+    # {{
     if inkey == 'KEY_UP':
         new_loc = (test_player.location[0] - 1, test_player.location[1])
         if new_loc in main_room_dict[(0, 0)].coord_dict:
             test_player.location = new_loc
-            game_over == True
     elif inkey == 'KEY_DOWN':
         new_loc = (test_player.location[0] + 1, test_player.location[1])
         if new_loc in main_room_dict[(0, 0)].coord_dict:
@@ -159,24 +145,32 @@ while game_over == False:
         new_loc = (test_player.location[0], test_player.location[1] - 1)
         if new_loc in main_room_dict[(0, 0)].coord_dict:
             test_player.location = new_loc
+    # }}
+
+    # If you press 't' then take what's at z0, and let everything else fall
+    # {{
     elif inkey == 't':
-#        test_player.inventory.append(main_room_dict[(0, 0)].coord_dict[test_player.location].take_z0)
         if main_room_dict[(0, 0)].coord_dict[test_player.location].z0 != None:
             test_player.inventory.append(main_room_dict[(0, 0)].coord_dict[test_player.location].z0)
             main_room_dict[(0, 0)].coord_dict[test_player.location].z0 = None
             main_room_dict[(0, 0)].coord_dict[test_player.location].fall()
-        
-        
-
+    # }}
+    
     elif inkey == 'q':
         game_over = True
+    
+    # If you're standing on a box, and there's something in the box, automatically take it
+    # {{
     if main_room_dict[(0, 0)].coord_dict[test_player.location].z0 != None:
         if main_room_dict[(0, 0)].coord_dict[test_player.location].z0.name == "box":
             if main_room_dict[(0, 0)].coord_dict[test_player.location].z0.has != None:
                 test_player.inventory.append(main_room_dict[(0, 0)].coord_dict[test_player.location].z0.has)
                 main_room_dict[(0, 0)].coord_dict[test_player.location].z0.has = None
+    # }}
 
 curses.endwin()
+# }}
+
 
 # This while-loop will run throughout the game
 # {{

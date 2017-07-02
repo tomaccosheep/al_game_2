@@ -1,7 +1,26 @@
 .make a room creator
-...make a list of rooms that are 25x25
 ...auto-place doors at edges of rooms in the middle of walls
 ...auto-trade chunks with adjacent rooms
 
+
 .make barrels flamable
 .make enemies shoot fire-spells
+
+.Make a room that has a maker maker
+...Make the first items produced off of a list
+......Make two maker makers, then a barrel maker, then a love maker
+
+.Make a function that turns enemies into puppies when their HP gets too high
+
+
+.Place obstacles on the ground like lava
+.Make a way to place walls
+...Make a walk inhibition part of the movement function
+......Consider making one move method for every movement
+
+
+.Make a pickup menu
+
+.Change how items are stored
+...Consider making inventory a dictionary, with the key being the spell name, and the value being the number in your inventory
+...Make a display based on the dictionary
